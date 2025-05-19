@@ -1,192 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Catetas AI Astro</title>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+---
+import Layout from "@/layouts/Layout.astro";
+---
 
-      body {
-        font-family: 'Inter', sans-serif;
-        background: linear-gradient(135deg, #1a1a2e, #121224);
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        color: #d8b4fe;
-      }
-      .container {
-        background: #1f1b2e;
-        border-radius: 1rem;
-        box-shadow: 0 8px 24px rgba(138, 91, 226, 0.7);
-        max-width: 600px;
-        width: 100%;
-        padding: 2rem 3rem;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      h1 {
-        font-size: 2.25rem;
-        font-weight: 600;
-        margin-bottom: 2rem;
-        text-align: center;
-        color: #a78bfa;
-      }
-      textarea {
-        width: 80%;
-        font-size: 1rem;
-        padding: 1rem 1.25rem;
-        border: 1.5px solid #7c3aed;
-        border-radius: 0.75rem;
-        background: #2a2340;
-        color: #e0d7ff;
-        resize: vertical;
-        box-shadow: inset 0 1px 3px rgba(138, 91, 226, 0.3);
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        min-height: 120px;
-        display: block;
-        margin: 0 auto;
-      }
-      textarea:focus {
-        outline: none;
-        border-color: #a78bfa;
-        box-shadow: 0 0 8px rgba(167, 139, 250, 0.7);
-        background: #3b2f5a;
-      }
-      button {
-        margin-top: 1.5rem;
-        padding: 0.75rem 2rem;
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #fff;
-        background: linear-gradient(90deg, #8a5be2, #ff69b4);
-        border: none;
-        border-radius: 1rem;
-        cursor: pointer;
-        box-shadow: 0 6px 20px rgba(138, 91, 226, 0.8);
-        transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      button:hover:not(:disabled) {
-        background: linear-gradient(90deg, #ff69b4, #8a5be2);
-        box-shadow: 0 8px 25px rgba(255, 105, 180, 0.9);
-        transform: translateY(-2px);
-      }
-      button:active:not(:disabled) {
-        transform: translateY(0);
-        box-shadow: 0 4px 12px rgba(255, 105, 180, 0.7);
-      }
-      button:disabled {
-        background: #a78bfa;
-        cursor: not-allowed;
-        box-shadow: none;
-        color: #d8b4fe;
-      }
-      #responseContainer {
-        margin-top: 2rem;
-        white-space: pre-wrap;
-        background: #2a2340;
-        padding: 1.5rem 2rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 12px rgba(138, 91, 226, 0.4);
-        min-height: 5rem;
-        color: #e0d7ff;
-        font-size: 1rem;
-        line-height: 1.5;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.4s ease, transform 0.4s ease;
-        width: 80%;
-        margin: 0 auto;
-      }
-      #responseContainer.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
+<Layout title="Qronex AI">
+
+    <main role="main">
+        <div class="container">
+            <h1>Qronex AI</h1>
+            <textarea
+            id="promptInput"
+            placeholder="Enter your prompt here..."
+            rows="5"
+            aria-label="Prompt input"
+            ></textarea>
+            <button id="generateBtn" aria-live="polite">Generate</button>
+            <div id="responseContainer" role="region" aria-live="polite" aria-atomic="true"></div>
+        </div>
+    </main>
+
+    <style>
+        body {
+            font-family: 'fredoka', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #121224);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: #d8b4fe;
+            }
+            .container {
+            background: #1f1b2e;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(138, 91, 226, 0.7);
+            max-width: 600px;
+            width: 100%;
+            padding: 2rem 3rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            }
+            h1 {
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #a78bfa;
+            }
+            textarea {
+            width: 80%;
+            font-size: 1rem;
+            padding: 1rem 1.25rem;
+            border: 1.5px solid #7c3aed;
+            border-radius: 0.75rem;
+            background: #2a2340;
+            color: #e0d7ff;
+            resize: vertical;
+            box-shadow: inset 0 1px 3px rgba(138, 91, 226, 0.3);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            min-height: 120px;
+            display: block;
+            margin: 0 auto;
+            }
+            textarea:focus {
+            outline: none;
+            border-color: #a78bfa;
+            box-shadow: 0 0 8px rgba(167, 139, 250, 0.7);
+            background: #3b2f5a;
+            }
+            button {
+            margin-top: 1.5rem;
+            padding: 0.75rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(90deg, #8a5be2, #ff69b4);
+            border: none;
+            border-radius: 1rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(138, 91, 226, 0.8);
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            }
+            button:hover:not(:disabled) {
+            background: linear-gradient(90deg, #ff69b4, #8a5be2);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.9);
+            transform: translateY(-2px);
+            }
+            button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.7);
+            }
+            button:disabled {
+            background: #a78bfa;
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #d8b4fe;
+            }
+            #responseContainer {
+            margin-top: 2rem;
+            white-space: pre-wrap;
+            background: #2a2340;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(138, 91, 226, 0.4);
+            min-height: 5rem;
+            color: #e0d7ff;
+            font-size: 1rem;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            width: 80%;
+            margin: 0 auto;
+            }
+            #responseContainer.visible {
+            opacity: 1;
+            transform: translateY(0);
+            }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Catetas AI - Astro Frontend</h1>
-      <textarea
-        id="promptInput"
-        placeholder="Enter your prompt here..."
-        rows="5"
-        aria-label="Prompt input"
-      ></textarea>
-      <button id="generateBtn" aria-live="polite">Generate</button>
-      <div id="responseContainer" role="region" aria-live="polite" aria-atomic="true"></div>
-    </div>
 
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
         const promptInput = /** @type {HTMLTextAreaElement} */ (document.getElementById('promptInput'));
         const generateBtn = /** @type {HTMLButtonElement} */ (document.getElementById('generateBtn'));
         const responseContainer = /** @type {HTMLDivElement} */ (document.getElementById('responseContainer'));
 
         if (!promptInput || !generateBtn || !responseContainer) {
-          console.error('Required elements not found');
-          return;
+            console.error('Required elements not found');
+            return;
         }
 
         generateBtn.disabled = false;
 
         function generateContent() {
-          const prompt = promptInput.value.trim();
-          if (!prompt) {
+            const prompt = promptInput.value.trim();
+            if (!prompt) {
             alert('Please enter a prompt.');
             return;
-          }
-          generateBtn.disabled = true;
-          generateBtn.textContent = 'Generating...';
-          responseContainer.classList.remove('visible');
-          responseContainer.textContent = '';
+            }
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            responseContainer.classList.remove('visible');
+            responseContainer.textContent = '';
 
-          fetch('http://localhost:5000/generate', {
+            fetch('http://localhost:5000/generate', {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({ prompt }),
-          })
+            })
             .then(res => res.json())
             .then(data => {
-              if (data.response) {
+                if (data.response) {
                 responseContainer.textContent = data.response;
-              } else {
+                } else {
                 responseContainer.textContent = 'Error: ' + (data.error || 'Unknown error');
-              }
+                }
             })
             .catch(error => {
-              if (error instanceof Error) {
+                if (error instanceof Error) {
                 responseContainer.textContent = 'Error: ' + error.message;
-              } else {
+                } else {
                 responseContainer.textContent = 'Error: ' + String(error);
-              }
+                }
             })
             .finally(() => {
-              responseContainer.classList.add('visible');
-              generateBtn.disabled = false;
-              generateBtn.textContent = 'Generate';
+                responseContainer.classList.add('visible');
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate';
             });
         }
 
         generateBtn.addEventListener('click', generateContent);
 
         promptInput.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' && !event.shiftKey) {
+            if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             generateContent();
-          }
+            }
         });
-      });
+        });
     </script>
-  </body>
-</html>
+
+</Layout>
