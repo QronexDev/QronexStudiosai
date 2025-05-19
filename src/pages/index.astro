@@ -5,16 +5,18 @@ import Layout from "@/layouts/Layout.astro";
 <Layout title="Qronex AI">
 
     <main role="main">
+        <h1>Qronex AI</h1>
         <div class="container">
-            <h1>Qronex AI</h1>
-            <textarea
-            id="promptInput"
-            placeholder="Enter your prompt here..."
-            rows="5"
-            aria-label="Prompt input"
-            ></textarea>
+            <div class="input-response-row">
+                <textarea
+                id="promptInput"
+                placeholder="Enter your prompt here..."
+                rows="5"
+                aria-label="Prompt input"
+                ></textarea>
+                <div id="responseContainer" role="region" aria-live="polite" aria-atomic="true"></div>
+            </div>
             <button id="generateBtn" aria-live="polite">Generate</button>
-            <div id="responseContainer" role="region" aria-live="polite" aria-atomic="true"></div>
         </div>
     </main>
 
@@ -34,35 +36,45 @@ import Layout from "@/layouts/Layout.astro";
             background: #1f1b2e;
             border-radius: 1rem;
             box-shadow: 0 8px 24px rgba(138, 91, 226, 0.7);
-            max-width: 600px;
+            max-width: 1000px;
             width: 100%;
             padding: 2rem 3rem;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 2rem;
+            }
+            .input-response-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 3rem;
+            width: 100%;
+            justify-content: center;
             }
             h1 {
-            font-size: 2.25rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
             text-align: center;
             color: #a78bfa;
             }
             textarea {
-            width: 80%;
-            font-size: 1rem;
-            padding: 1rem 1.25rem;
-            border: 1.5px solid #7c3aed;
-            border-radius: 0.75rem;
-            background: #2a2340;
+            width: 320px;
+            font-size: 1.3rem;
+            padding: 1.75rem 2.5rem;
+            border: 2px solid #8a5be2;
+            border-radius: 1rem;
+            background: #2e2650;
             color: #e0d7ff;
             resize: vertical;
-            box-shadow: inset 0 1px 3px rgba(138, 91, 226, 0.3);
+            box-shadow: inset 0 2px 6px rgba(138, 91, 226, 0.5);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            min-height: 120px;
+            min-height: 180px;
             display: block;
-            margin: 0 auto;
+            margin-left: 0;
+            margin-right: 0;
             }
             textarea:focus {
             outline: none;
@@ -71,20 +83,21 @@ import Layout from "@/layouts/Layout.astro";
             background: #3b2f5a;
             }
             button {
-            margin-top: 1.5rem;
-            padding: 0.75rem 2rem;
-            font-size: 1.125rem;
-            font-weight: 600;
+            margin-top: 0;
+            padding: 1.25rem 3.5rem;
+            font-size: 1.6rem;
+            font-weight: 700;
             color: #fff;
-            background: linear-gradient(90deg, #8a5be2, #ff69b4);
+            background: linear-gradient(90deg, #9a6ef8, #ff7eb9);
             border: none;
-            border-radius: 1rem;
+            border-radius: 1.25rem;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(138, 91, 226, 0.8);
+            box-shadow: 0 8px 24px rgba(138, 91, 226, 0.9);
             transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
             display: block;
             margin-left: auto;
             margin-right: auto;
+            align-self: center;
             }
             button:hover:not(:disabled) {
             background: linear-gradient(90deg, #ff69b4, #8a5be2);
@@ -102,21 +115,21 @@ import Layout from "@/layouts/Layout.astro";
             color: #d8b4fe;
             }
             #responseContainer {
-            margin-top: 2rem;
+            margin-top: 0;
             white-space: pre-wrap;
-            background: #2a2340;
-            padding: 1.5rem 2rem;
+            background: #2e2650;
+            padding: 1.75rem 2.5rem;
             border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(138, 91, 226, 0.4);
+            box-shadow: 0 6px 16px rgba(138, 91, 226, 0.6);
             min-height: 5rem;
             color: #e0d7ff;
-            font-size: 1rem;
-            line-height: 1.5;
+            font-size: 1.1rem;
+            line-height: 1.6;
             opacity: 0;
             transform: translateY(10px);
             transition: opacity 0.4s ease, transform 0.4s ease;
-            width: 80%;
-            margin: 0 auto;
+            width: 320px;
+            margin: 0;
             }
             #responseContainer.visible {
             opacity: 1;
@@ -126,19 +139,19 @@ import Layout from "@/layouts/Layout.astro";
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        const promptInput = /** @type {HTMLTextAreaElement} */ (document.getElementById('promptInput'));
-        const generateBtn = /** @type {HTMLButtonElement} */ (document.getElementById('generateBtn'));
-        const responseContainer = /** @type {HTMLDivElement} */ (document.getElementById('responseContainer'));
+        let promptInput = document.getElementById('promptInput');
+        let generateBtn = document.getElementById('generateBtn');
+        let responseContainer = document.getElementById('responseContainer');
 
-        if (!promptInput || !generateBtn || !responseContainer) {
-            console.error('Required elements not found');
+        if (!(promptInput instanceof HTMLTextAreaElement) || !(generateBtn instanceof HTMLButtonElement) || !(responseContainer instanceof HTMLDivElement)) {
+            console.error('Required elements not found or incorrect types');
             return;
         }
 
         generateBtn.disabled = false;
 
         function generateContent() {
-            const prompt = promptInput.value.trim();
+            const prompt = (promptInput as HTMLTextAreaElement).value.trim();
             if (!prompt) {
             alert('Please enter a prompt.');
             return;
@@ -174,6 +187,7 @@ import Layout from "@/layouts/Layout.astro";
                 responseContainer.classList.add('visible');
                 generateBtn.disabled = false;
                 generateBtn.textContent = 'Generate';
+                (promptInput as HTMLTextAreaElement).value = '';
             });
         }
 
