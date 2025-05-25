@@ -3,17 +3,17 @@ name: Deploy Astro site to GitHub Pages
 on:
   push:
     branches:
-      - main  # Cambia si usas otra rama
+      - main  # o la rama que estés usando
 
 permissions:
-  contents: write  # Necesario para publicar en gh-pages
+  contents: write
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Setup pnpm
+      - name: Enable pnpm
         run: |
           corepack enable
           corepack prepare pnpm@latest --activate
@@ -32,7 +32,7 @@ jobs:
       - name: Build site
         run: |
           pnpm build
-          touch dist/.nojekyll  # Evita que GitHub Pages intente usar Jekyll
+          touch dist/.nojekyll  # Desactiva Jekyll en GitHub Pages
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
