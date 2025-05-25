@@ -3,7 +3,7 @@ name: Deploy Astro site to GitHub Pages
 on:
   push:
     branches:
-      - main  # cambia si tu rama es diferente
+      - main
 
 permissions:
   contents: write
@@ -21,12 +21,15 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable pnpm
+        run: corepack enable && corepack prepare pnpm@latest --activate
+
       - name: Install dependencies
-        run: pnpm ci
+        run: pnpm install
 
       - name: Build site
         run: |
-          pnpm run build
+          pnpm build
           touch dist/.nojekyll
 
       - name: Deploy to GitHub Pages
