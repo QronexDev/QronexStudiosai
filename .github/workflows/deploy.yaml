@@ -3,7 +3,7 @@ name: Deploy Astro site to GitHub Pages
 on:
   push:
     branches:
-      - main  # o la rama que estés usando
+      - main
 
 permissions:
   contents: write
@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -29,10 +28,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build site
+      - name: Build Astro site
         run: |
           pnpm build
-          touch dist/.nojekyll  # Desactiva Jekyll en GitHub Pages
+          touch dist/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
