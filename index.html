@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-mmggtga4> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Qronex AI</title><link rel="stylesheet" href="/_astro/index.4e2585a5.css" /></head> <body data-astro-cid-mmggtga4>  <main data-astro-cid-j7pv25f6> <header data-astro-cid-j7pv25f6>Qronex AI</header> <div id="chat" role="log" aria-live="polite" aria-relevant="additions" data-astro-cid-j7pv25f6> <div class="message ai" data-astro-cid-j7pv25f6>¡Hola! 👋 Soy tu asistente AI. ¿En qué puedo ayudarte hoy?</div> </div> <form id="ai-form" aria-label="Formulario de chat" data-astro-cid-j7pv25f6> <textarea id="prompt" placeholder="Escribe tu mensaje aquí..." required aria-required="true" aria-label="Entrada de texto para el chat" spellcheck="false" data-astro-cid-j7pv25f6></textarea> <button type="submit" aria-label="Enviar mensaje al chat" data-astro-cid-j7pv25f6>Enviar</button> </form> </main>  </body></html>  <script type="module">
+    const form = document.getElementById('ai-form');
+    const textarea = document.getElementById('prompt');
+    const button = form.querySelector('button');
+    const chat = document.getElementById('chat');
+    
+    let isAIWriting = false;
+
+    function setFormDisabled(disabled) {
+        isAIWriting = disabled;
+        textarea.disabled = disabled;
+        button.disabled = disabled;
+        
+        if (disabled) {
+            form.classList.add('disabled');
+            textarea.placeholder = 'La IA está escribiendo...';
+        } else {
+            form.classList.remove('disabled');
+            textarea.placeholder = 'Escribe tu mensaje aquí...';
+        }
+    }
+
+    function addMessage(text, sender = 'user') {
+        const div = document.createElement('div');
+        
+        if (sender === 'user') {
+            div.style.cssText = `
+                max-width: 80%;
+                padding: 1.25rem 1.75rem;
+                font-size: 1rem;
+                line-height: 1.6;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                position: relative;
+                font-weight: 500;
+                letter-spacing: -0.01em;
+                border-radius: 20px;
+                border-bottom-right-radius: 8px;
+                background: linear-gradient(135deg, rgba(168, 85, 247, 0.8) 0%, rgba(236, 72, 153, 0.8) 100%);
+                color: #ffffff;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(168, 85, 247, 0.3);
+                user-select: text;
+                animation: messageSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                transform: translateY(20px);
+                opacity: 0;
+                transition: all 0.3s ease;
+                align-self: flex-end;
+                margin-left: auto;
+                margin-right: 0;
+                overflow: hidden;`;
+
+            setTimeout(() => {
+                div.style.transform = 'translateY(0)';
+                div.style.opacity = '1';
+            }, 10);
+        
+        } else {
+            div.style.cssText = `
+                max-width: 80%;
+                padding: 1.25rem 1.75rem;
+                font-size: 1rem;
+                line-height: 1.6;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                position: relative;
+                font-weight: 400;
+                letter-spacing: -0.01em;
+                border-radius: 20px;
+                border-bottom-left-radius: 8px;
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+                border: 1px solid rgba(59, 130, 246, 0.2);
+                color: #e2e8f0;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                user-select: text;
+                animation: messageSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                transform: translateY(20px);
+                opacity: 0;
+                transition: all 0.3s ease;
+                align-self: flex-start;
+                margin-right: auto;
+                margin-left: 0;
+                overflow: hidden;
+            `;
+        
+            setTimeout(() => {
+                div.style.transform = 'translateY(0)';
+                div.style.opacity = '1';
+            }, 10);
+        }
+        
+        div.textContent = text;
+        chat.appendChild(div);
+        
+        setTimeout(() => {
+            chat.scrollTop = chat.scrollHeight;
+        }, 100);
+        
+        return div;
+    }
+
+    function showTypingIndicator() {
+        const div = document.createElement('div');
+        
+        div.style.cssText = `
+            max-width: 80%;
+            padding: 1.25rem 1.75rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            position: relative;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            border-radius: 20px;
+            border-bottom-left-radius: 8px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #e2e8f0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            user-select: text;
+            animation: messageSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            margin-right: auto;
+            margin-left: 0;
+            overflow: hidden;
+            `;
+        
+        div.innerHTML = `
+            <div class="typing-indicator">
+                <span>Escribiendo</span>
+                <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                </div>
+            </div>`;
+        
+        chat.appendChild(div);
+        
+        setTimeout(() => {
+            div.style.transform = 'translateY(0)';
+            div.style.opacity = '1';
+        }, 10);
+        
+        chat.scrollTop = chat.scrollHeight;
+        return div;
+    }
+
+    if (form && textarea && chat) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isAIWriting) return;
+            
+            const prompt = textarea.value.trim();
+            if (!prompt) return;
+
+            setFormDisabled(true);
+            addMessage(prompt, 'user');
+            textarea.value = '';
+            textarea.style.height = '56px';
+
+            const typingElement = showTypingIndicator();
+
+            try {
+                const response = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                    
+                if (typingElement && typingElement.parentNode) {
+                    typingElement.remove();
+                }
+
+                const aiResponse = data.answer || 'No se recibió respuesta válida.';
+                addMessage(aiResponse, 'ai');
+
+            } catch (error) {
+            console.error('Error:', error);
+            
+            if (typingElement && typingElement.parentNode) {
+                typingElement.remove();
+            }
+
+            const errorMessage = error.message.includes('fetch') 
+                ? '❌ Error de conexión. Verifica tu internet.'
+                : '❌ Error al procesar la respuesta.';
+            
+            addMessage(errorMessage, 'ai');
+        } finally {
+            setFormDisabled(false);
+            textarea.focus();
+        }
+        });
+
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey && !isAIWriting) {
+                e.preventDefault();
+                form.requestSubmit();
+            }
+        });
+
+        textarea.addEventListener('input', () => {
+        });
+    }
+</script>
